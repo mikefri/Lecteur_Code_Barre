@@ -57,6 +57,31 @@ async function stopScan() {
     scannerBox.classList.remove('scanning');
 }
 
+// Détecter si c'est un lien
+function isURL(str) {
+    const pattern = /^(https?:\/\/|www\.)[^\s]+$/i;
+    return pattern.test(str);
+}
+
+// Formater le lien pour l'affichage
+function formatURL(url) {
+    // Ajouter https:// si commence par www.
+    if (url.startsWith('www.')) {
+        return 'https://' + url;
+    }
+    return url;
+}
+
+// Obtenir un affichage court du lien
+function getShortURL(url) {
+    try {
+        const urlObj = new URL(formatURL(url));
+        return urlObj.hostname + (urlObj.pathname !== '/' ? urlObj.pathname.substring(0, 20) + '...' : '');
+    } catch {
+        return url.substring(0, 30) + '...';
+    }
+}
+
 // On Success
 function onSuccess(code, details) {
     // Éviter doublons
@@ -69,11 +94,12 @@ function onSuccess(code, details) {
         id: Date.now(),
         code: code,
         format: details.result.format?.formatName || 'Code',
-        time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+        time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+        isLink: isURL(code)
     };
     
     results.unshift(result);
-    if (results.length > 50) results.pop(); // Limite 50
+    if (results.length > 50) results.pop();
     
     saveResults();
     renderResults();
@@ -90,18 +116,37 @@ function renderResults() {
         return;
     }
     
-    resultsList.innerHTML = results.map(r => `
-        <div class="result-item">
-            <div class="result-info">
-                <div class="result-code">${r.code}</div>
-                <div class="result-meta">${r.format} • ${r.time}</div>
+    resultsList.innerHTML = results.map(r => {
+        const isLink = r.isLink || isURL(r.code);
+        const fullURL = isLink ? formatURL(r.code) : null;
+        
+        return `
+            <div class="result-item ${isLink ? 'is-link' : ''}">
+                <div class="result-info">
+                    ${isLink ? `
+                        <a href="${fullURL}" target="_blank" rel="noopener" class="result-code result-link">
+                            🔗 ${r.code}
+                        </a>
+                    ` : `
+                        <div class="result-code">${r.code}</div>
+                    `}
+                    <div class="result-meta">${r.format} • ${r.time}</div>
+                </div>
+                <div class="result-actions">
+                    ${isLink ? `
+                        <button class="action-btn open-btn" onclick="openLink('${fullURL}')" title="Ouvrir">🌐</button>
+                    ` : ''}
+                    <button class="action-btn" onclick="copyCode('${r.code}')" title="Copier">📋</button>
+                    <button class="action-btn" onclick="deleteResult(${r.id})" title="Supprimer">🗑️</button>
+                </div>
             </div>
-            <div class="result-actions">
-                <button class="action-btn" onclick="copyCode('${r.code}')" title="Copier">📋</button>
-                <button class="action-btn" onclick="deleteResult(${r.id})" title="Supprimer">🗑️</button>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
+}
+
+// Open Link
+function openLink(url) {
+    window.open(url, '_blank', 'noopener');
 }
 
 // Copy Code
