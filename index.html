@@ -3,11 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#A8D5E2">
+    <meta name="description" content="Application professionnelle de scan de codes-barres et QR codes. Fonctionne hors ligne!">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Scanneur Pro">
+    
     <title>Scanneur de Codes-Barres Pro</title>
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-72x72.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72x72.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt" style="display: none;">
+        <div class="install-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <h3>Installer l'application</h3>
+                <p>Accédez rapidement au scanneur depuis votre écran d'accueil</p>
+            </div>
+            <div class="install-actions">
+                <button id="installBtn" class="btn btn-primary">Installer</button>
+                <button id="dismissBtn" class="btn btn-outline">Plus tard</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <header class="header">
@@ -25,6 +66,12 @@
                 <h1>Scanneur Pro</h1>
             </div>
             <p class="subtitle">Scannez tous types de codes-barres</p>
+            
+            <!-- PWA Status Badge -->
+            <div class="pwa-badge" id="pwaBadge">
+                <span class="status-dot"></span>
+                <span id="onlineStatus">En ligne</span>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -119,12 +166,20 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>© 2024 Scanneur Pro | Développé avec ❤️</p>
+            <p>© 2024 Scanneur Pro | PWA v1.0 | Développé avec ❤️</p>
         </footer>
     </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
+
+    <!-- Update Notification -->
+    <div id="updateNotification" class="update-notification" style="display: none;">
+        <div class="update-content">
+            <span>🎉 Nouvelle version disponible!</span>
+            <button id="updateBtn" class="btn btn-small">Mettre à jour</button>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/html5-qrcode"></script>
