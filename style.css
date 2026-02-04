@@ -254,3 +254,38 @@ body {
         min-height: 250px;
     }
 }
+.result-link {
+    color: var(--primary);
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s;
+}
+
+.result-link:hover {
+    color: #3D6FD1;
+    text-decoration: underline;
+}
+
+.result-item.is-link {
+    border-left: 3px solid var(--primary);
+}
+
+.open-btn {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+.open-btn:hover {
+    background: #3D6FD1 !important;
+}
+
+/* Animation pour les liens */
+.result-item.is-link .result-link::before {
+    content: '';
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.result-item.is-link:hover {
+    background: #EEF4FF;
+}
