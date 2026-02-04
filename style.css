@@ -499,3 +499,98 @@ body {
         grid-column: 1 / -1;
     }
 }
+/* ===== PWA STYLES ===== */
+
+/* Install Prompt */
+.install-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border-radius: 15px;
+    box-shadow: 0 8px 30px var(--shadow);
+    padding: 20px;
+    max-width: 500px;
+    width: 90%;
+    z-index: 1000;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        bottom: -100px;
+        opacity: 0;
+    }
+    to {
+        bottom: 20px;
+        opacity: 1;
+    }
+}
+
+.install-content {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.install-icon {
+    font-size: 2.5rem;
+}
+
+.install-text {
+    flex: 1;
+    min-width: 200px;
+}
+
+.install-text h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+
+.install-text p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.install-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.install-actions .btn {
+    flex: 1;
+}
+
+/* PWA Badge */
+.pwa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--background);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    
