@@ -3,185 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#A8D5E2">
-    <meta name="description" content="Application professionnelle de scan de codes-barres et QR codes. Fonctionne hors ligne!">
+    <meta name="theme-color" content="#5B8DEF">
+    <meta name="description" content="Scanneur de codes-barres simple et rapide">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Scanneur Pro">
-    
-    <title>Scanneur de Codes-Barres Pro</title>
-    
-    <!-- Manifest -->
+    <title>Scanneur</title>
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-72x72.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72x72.png">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384x384.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
-    
-    <!-- Styles -->
+    <link rel="icon" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Install Prompt -->
-    <div id="installPrompt" class="install-prompt" style="display: none;">
-        <div class="install-content">
-            <div class="install-icon">📱</div>
-            <div class="install-text">
-                <h3>Installer l'application</h3>
-                <p>Accédez rapidement au scanneur depuis votre écran d'accueil</p>
-            </div>
-            <div class="install-actions">
-                <button id="installBtn" class="btn btn-primary">Installer</button>
-                <button id="dismissBtn" class="btn btn-outline">Plus tard</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Header -->
+    <div class="app">
+        <!-- Header Simple -->
         <header class="header">
-            <div class="logo">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <rect x="2" y="8" width="3" height="24" fill="#A8D5E2"/>
-                    <rect x="7" y="8" width="2" height="24" fill="#A8D5E2"/>
-                    <rect x="11" y="8" width="4" height="24" fill="#A8D5E2"/>
-                    <rect x="17" y="8" width="2" height="24" fill="#A8D5E2"/>
-                    <rect x="21" y="8" width="3" height="24" fill="#A8D5E2"/>
-                    <rect x="26" y="8" width="2" height="24" fill="#A8D5E2"/>
-                    <rect x="30" y="8" width="4" height="24" fill="#A8D5E2"/>
-                    <rect x="36" y="8" width="2" height="24" fill="#A8D5E2"/>
-                </svg>
-                <h1>Scanneur Pro</h1>
-            </div>
-            <p class="subtitle">Scannez tous types de codes-barres</p>
-            
-            <!-- PWA Status Badge -->
-            <div class="pwa-badge" id="pwaBadge">
-                <span class="status-dot"></span>
-                <span id="onlineStatus">En ligne</span>
-            </div>
+            <h1>📷 Scanneur</h1>
         </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Scanner Section -->
-            <div class="scanner-section">
-                <div class="camera-container" id="cameraContainer">
-                    <div id="reader"></div>
-                    <div class="scanner-overlay" id="scannerOverlay">
-                        <div class="scan-line"></div>
-                    </div>
-                </div>
+        <!-- Zone Scanner -->
+        <div class="scanner-box">
+            <div id="reader"></div>
+            <div class="scan-indicator"></div>
+        </div>
 
-                <!-- Controls -->
-                <div class="controls">
-                    <button id="startBtn" class="btn btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 14.5v-9l6 4.5-6 4.5z"/>
-                        </svg>
-                        Démarrer le scan
-                    </button>
-                    <button id="stopBtn" class="btn btn-secondary" style="display: none;">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <rect x="5" y="5" width="10" height="10"/>
-                        </svg>
-                        Arrêter
-                    </button>
-                    <button id="switchCameraBtn" class="btn btn-outline" style="display: none;">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
-                        </svg>
-                        Changer de caméra
-                    </button>
-                </div>
+        <!-- Bouton Principal -->
+        <button id="scanBtn" class="scan-btn">
+            <span class="btn-icon">▶</span>
+            <span class="btn-text">Scanner</span>
+        </button>
 
-                <!-- Format Selector -->
-                <div class="format-selector">
-                    <label for="formatSelect">Type de code :</label>
-                    <select id="formatSelect" class="select">
-                        <option value="all">Tous les formats</option>
-                        <option value="qr">QR Code</option>
-                        <option value="ean13">EAN-13</option>
-                        <option value="ean8">EAN-8</option>
-                        <option value="code128">Code 128</option>
-                        <option value="code39">Code 39</option>
-                        <option value="upc">UPC</option>
-                        <option value="datamatrix">Data Matrix</option>
-                    </select>
-                </div>
+        <!-- Résultats -->
+        <div class="results">
+            <div class="results-title">
+                <span>Historique</span>
+                <button id="clearBtn" class="clear-btn">Effacer</button>
             </div>
-
-            <!-- Results Section -->
-            <div class="results-section">
-                <div class="results-header">
-                    <h2>Résultats</h2>
-                    <button id="clearBtn" class="btn btn-small">Effacer tout</button>
-                </div>
-                
-                <div id="resultsList" class="results-list">
-                    <div class="empty-state">
-                        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                            <rect x="10" y="20" width="6" height="40" fill="#E8E8E8"/>
-                            <rect x="20" y="20" width="4" height="40" fill="#E8E8E8"/>
-                            <rect x="28" y="20" width="8" height="40" fill="#E8E8E8"/>
-                            <rect x="40" y="20" width="4" height="40" fill="#E8E8E8"/>
-                            <rect x="48" y="20" width="6" height="40" fill="#E8E8E8"/>
-                            <rect x="58" y="20" width="4" height="40" fill="#E8E8E8"/>
-                            <rect x="66" y="20" width="8" height="40" fill="#E8E8E8"/>
-                        </svg>
-                        <p>Aucun code scanné</p>
-                        <span>Cliquez sur "Démarrer le scan" pour commencer</span>
-                    </div>
-                </div>
+            <div id="resultsList" class="results-list">
+                <p class="empty">Aucun scan</p>
             </div>
-
-            <!-- Stats -->
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalScans">0</div>
-                    <div class="stat-label">Scans totaux</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="successRate">0%</div>
-                    <div class="stat-label">Taux de réussite</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="lastScanTime">--</div>
-                    <div class="stat-label">Dernier scan</div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>© 2024 Scanneur Pro | PWA v1.0 | Développé avec ❤️</p>
-        </footer>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Update Notification -->
-    <div id="updateNotification" class="update-notification" style="display: none;">
-        <div class="update-content">
-            <span>🎉 Nouvelle version disponible!</span>
-            <button id="updateBtn" class="btn btn-small">Mettre à jour</button>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="script.js"></script>
 </body>
